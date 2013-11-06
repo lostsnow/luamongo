@@ -1,9 +1,23 @@
+# Default installation prefix
+PREFIX=/usr/local
+
+# System's libraries directory (where binary libraries are installed)
+LUA_LIBDIR= $(PREFIX)/lib/lua/5.1
+
+# Lua includes directory
+LUA_INC= $(PREFIX)/include
+
+MONGO_PREFIX=/usr/local
+BOOST_LIB=/usr/lib64
+
+INCS= -I$(LUA_INC) -I$(MONGO_PREFIX)/include -I$(MONGO_PREFIX)/include/mongo -L$(MONGO_PREFIX)/lib -L$(BOOST_LIB)
+
 CC= g++
-CFLAGS= -g -O2 -shared -fPIC -I /usr/include/lua5.1/ -I/usr/local/include/mongo/
+CFLAGS= -g -O2 -shared -fPIC $(INCS)
 AR= ar rcu
 RANLIB= ranlib
 RM= rm -f
-LIBS=-lmongoclient -lboost_thread -lboost_filesystem
+LIBS=-lmongoclient -lboost_thread-mt -lboost_filesystem
 OUTLIB=mongo.so
 
 LDFLAGS= $(LIBS)
@@ -49,4 +63,4 @@ mongo_bsontypes.o: mongo_bsontypes.cpp common.h
 utils.o: utils.cpp common.h utils.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-.PHONY: all 
+.PHONY: all
